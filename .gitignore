@@ -5,3 +5,4 @@
 /config.php
 *.bak
 /resources
+/assets/plugins
