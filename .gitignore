@@ -1,0 +1,6 @@
+/adminlte
+/node_modules
+/dist
+/_*
+*.bak
+/config.php
