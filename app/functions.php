@@ -20,24 +20,31 @@ $labels = is_file(PATH_APP . 'l18n/texts.'.$lang.'.php') ?
   include(PATH_APP . 'l18n/texts.'.$lang_dft.'.php');
 $variables = include('routes.php');
 
-/*
 global $DBConn;
 if (defined('DB_HOST')) {
   if (DB_TYPE == 'mssql') {
-    $DBConn = sqlsrv_connect("tcp:".DB_HOST.",".DB_PORT,[
-      'Database'=>DB_NAME,
-      'Uid'=>DB_USERNAME,
-      'PWD'=>DB_USERPASSWORD,
-    ]);
+    try {
+      $DBConn = new PDO("sqlsrv:server = tcp:barnes-crm-data-server.database.windows.net,1433; Database = barnes_data", "barnes_admin", "(38EPRa?ZJ");
+      if ($DBConn) {
+        $DBConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $DBConn->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
+      } else {
+        $DBConn = false;
+      }
+    } catch(Error $e) {
+      $DBConn = false;
+      var_dump($e);
+    }
   }
-  if ($DBConn)
+  if ($DBConn) {
     register_shutdown_function(function(){
       global $DBConn;
-      if (isset($DBConn)) sqlsrv_close($DBConn);
+      if (isset($DBConn)) {
+        unset($DBConn);
+      }
     });
-  else die("DB Connection error");
+  }
 }
-*/
 
 // Get label
 
