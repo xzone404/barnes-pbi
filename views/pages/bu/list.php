@@ -14,7 +14,6 @@ if ($DBConn) {
 		}
 	}
 }
-var_dump($data);
 
 /*
 require_once(PATH_CLASSES . 'Form.php');
@@ -68,6 +67,18 @@ $fields = [
 						</tr>
 						</thead>
 						<tbody>
+						<?php foreach($data as $row) : ?>
+						<tr>
+							<td><?php htmlentities($row['id'] ?? ''); ?></td>
+							<td><?php htmlentities($row['name'] ?? ''); ?></td>
+							<td><?php htmlentities($row['source'] ?? ''); ?></td>
+							<td><?php htmlentities($row['id_source'] ?? ''); ?></td>
+							<td><?php htmlentities($row['active'] ?? ''); ?></td>
+							<td><?php htmlentities($row['creation_at'] ?? ''); ?></td>
+							<td><?php htmlentities($row['modified_at'] ?? ''); ?></td>
+						</tr>
+						<?php endforeach; ?>
+						<?php /*
 						<tr>
 							<td>Trident</td>
 							<td>Internet Explorer 4.0</td>
@@ -110,6 +121,7 @@ $fields = [
 							<td>A</td>
 							<td>A</td>
 						</tr>
+						*/ ?>
 						</tbody>
 						<tfoot>
 						<tr>
