@@ -7,7 +7,7 @@ $data = [];
 
 global $DBConn;
 if ($DBConn) {
-	$r = $DBConn->query("SELECT * FROM my_collaborator;");
+	$r = $DBConn->query("SELECT c.name as cluster_name, b.name as bu_name, s.label as status_name, bc.* FROM my_cluster c, my_bu b, my_status s, my_cluster_bu bc WHERE bc.cluster = c.id AND bc.bu = b.id AND bc.status = s.id;");
 	if ($r) {
 		foreach ($r as $row) {
 			$data[] = $row;
@@ -34,9 +34,12 @@ if ($DBConn) {
 						<thead>
 						<tr>
 							<th>#ID</th>
-							<th>Firstname</th>
-							<th>Lastname</th>
-							<th>Email</th>
+							<th>Cluster</th>
+							<th>C.id</th>
+							<th>BU</th>
+							<th>B.id</th>
+							<th>Status</th>
+							<th>S.id</th>
 							<th>Created</th>
 							<th>Modified</th>
 						</tr>
@@ -45,9 +48,12 @@ if ($DBConn) {
 						<?php foreach($data as $row) : ?>
 						<tr>
 							<td><?php htmlentities($row['id'] ?? ''); ?></td>
-							<td><?php htmlentities($row['firstname'] ?? ''); ?></td>
-							<td><?php htmlentities($row['lastname'] ?? ''); ?></td>
-							<td><?php htmlentities($row['email'] ?? ''); ?></td>
+							<td><?php htmlentities($row['cluster_name'] ?? ''); ?></td>
+							<td><?php htmlentities($row['cluster'] ?? ''); ?></td>
+							<td><?php htmlentities($row['bu_name'] ?? ''); ?></td>
+							<td><?php htmlentities($row['bu'] ?? ''); ?></td>
+							<td><?php htmlentities($row['status_name'] ?? ''); ?></td>
+							<td><?php htmlentities($row['status'] ?? ''); ?></td>
 							<td><?php htmlentities($row['creation_at'] ?? ''); ?></td>
 							<td><?php htmlentities($row['modified_at'] ?? ''); ?></td>
 						</tr>
@@ -56,9 +62,12 @@ if ($DBConn) {
 						<tfoot>
 						<tr>
 							<th>#ID</th>
-							<th>Firstname</th>
-							<th>Lastname</th>
-							<th>Email</th>
+							<th>Cluster</th>
+							<th>C.id</th>
+							<th>BU</th>
+							<th>B.id</th>
+							<th>Status</th>
+							<th>S.id</th>
 							<th>Created</th>
 							<th>Modified</th>
 						</tr>

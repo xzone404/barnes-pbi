@@ -78,54 +78,10 @@ $fields = [
 							<td><?php htmlentities($row['modified_at'] ?? ''); ?></td>
 						</tr>
 						<?php endforeach; ?>
-						<?php /*
-						<tr>
-							<td>Trident</td>
-							<td>Internet Explorer 4.0</td>
-							<td>Win 95+</td>
-							<td> 4</td>
-							<td>X</td>
-							<td>X</td>
-							<td>X</td>
-						</tr>
-						<tr>
-							<td>Trident</td>
-							<td>Internet
-								Explorer 5.0
-							</td>
-							<td>Win 95+</td>
-							<td>5</td>
-							<td>C</td>
-							<td>C</td>
-							<td>C</td>
-						</tr>
-						<tr>
-							<td>Trident</td>
-							<td>Internet
-								Explorer 5.5
-							</td>
-							<td>Win 95+</td>
-							<td>5.5</td>
-							<td>A</td>
-							<td>A</td>
-							<td>A</td>
-						</tr>
-						<tr>
-							<td>Trident</td>
-							<td>Internet
-								Explorer 6
-							</td>
-							<td>Win 98+</td>
-							<td>6</td>
-							<td>A</td>
-							<td>A</td>
-							<td>A</td>
-						</tr>
-						*/ ?>
 						</tbody>
 						<tfoot>
 						<tr>
-						<th>#ID</th>
+							<th>#ID</th>
 							<th>BU Name</th>
 							<th>Source</th>
 							<th>ID source</th>
