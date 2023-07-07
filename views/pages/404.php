@@ -36,7 +36,6 @@ if (!defined('ENV')) die();
         <div class="col-12">
           <ul class="actions pb-6" style="justify-content: center;">
             <li><a class="button accent6" href="<?php echo esc_attr(get_site_link()); ?>">Retour à l'accueil</a></li>
-            <li><a class="button accent6" href="<?php echo esc_attr(get_page_link('inscription')); ?>">S'inscrire au registre</a></li>
           </ul>
         </div>
       </div>

@@ -47,9 +47,10 @@ $menu = v('menu');
           <?php
             foreach ($menu as $m_item) :
               $menu_item = get_page($m_item->menu_item);
+              $menu_item_on = ($menu_item->uri == preg_replace('%^([^\/]+)\/.*$%', '$1', get_current_uri()));
           ?>
-          <li class="nav-item<?php if ($menu_item->uri == preg_replace('%^([^\/]+)\/.*$%', '$1', get_current_uri())) echo ' menu-open'; ?>">
-            <a href="#" class="nav-link active">
+          <li class="nav-item<?php if ($menu_item_on) echo ' menu-open'; ?>">
+            <a href="#" class="nav-link<?php if ($menu_item_on) echo ' active'; ?>">
               <i class="nav-icon <?php echo $menu_item->menu_icon ?? 'fas fa-tachometer-alt'; ?>"></i>
               <p>
                 <?php echo $menu_item->menu_label; ?>

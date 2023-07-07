@@ -28,7 +28,7 @@ foreach ($pages as $page) {
 
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+        <a class="nav-link" href="<?php echo get_site_link('logout'); ?>" role="button">
           <i class="fas fa-lock-open"></i> Logout
         </a>
       </li>

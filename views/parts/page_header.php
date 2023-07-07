@@ -5,10 +5,12 @@ if (!defined('ENV')) die();
 $p_home = get_page_home();
 $p_current = get_current_page();
 
+$display_breadcrumb = (isset($display_breadcrumb) && !$display_breadcrumb) ? false : true;
+$wrap_content = (isset($wrap_content) && !$wrap_content) ? false : true;
 ?>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper"<?php if (!$wrap_content) { ?> style="margin-left: 0;"<?php } ?>>
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -16,6 +18,7 @@ $p_current = get_current_page();
           <div class="col-sm-6">
             <h1 class="m-0"><?php echo is_home() ? __("site_title") : $p_current->menu_label; ?></h1>
           </div><!-- /.col -->
+          <?php if ($display_breadcrumb) : ?>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/"><?php echo $p_home->menu_label; ?></a></li>
@@ -35,6 +38,7 @@ $p_current = get_current_page();
               ?>              
             </ol>
           </div><!-- /.col -->
+          <?php endif; ?>
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
