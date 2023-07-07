@@ -50,7 +50,7 @@ class Nonce {
             $browserIdentifier = $this->createBrowserIdentifier($action);
         }
 
-	return substr(hash_hmac('md5', ( $this->tick() - $offset) . $browserIdentifier . '-nonce', self::SALT ), -12, 10);
+	    return substr(hash_hmac('md5', ( $this->tick() - $offset) . $browserIdentifier . '-nonce', self::SALT ), -12, 10);
     }
     
     /**
@@ -73,15 +73,15 @@ class Nonce {
         $browserIdentifier = $_COOKIE[$cookieName];
 
 	// Nonce generated 30 mins ago
-	if ( $this->createNonce($action, $browserIdentifier) == $nonce )
-          return 1;
+	    if ( $this->createNonce($action, $browserIdentifier) == $nonce )
+            return 1;
     
 	// Nonce generated 60 mins ago
-	if ( $this->createNonce($action, $browserIdentifier ,1) == $nonce )
-          return 2;
+	    if ( $this->createNonce($action, $browserIdentifier ,1) == $nonce )
+            return 2;
             
-	// Invalid nonce
-	return false;
+	    // Invalid nonce
+	    return false;
     }
     
     /**
@@ -102,7 +102,7 @@ class Nonce {
      * @return float Float value rounded up to the next highest integer.
      */
     private function tick() : float {
-	return ceil(time() / ( self::NONCE_LIFE / 2 ));
+	    return ceil(time() / ( self::NONCE_LIFE / 2 ));
     }
 
 

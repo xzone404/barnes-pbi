@@ -150,7 +150,7 @@
          */
         public function required(){
             
-            if((isset($this->file) && $this->file['error'] == 4) || ($this->value == '' || $this->value == null)){
+            if((isset($this->file) && $this->file['error'] == 4) || ($this->value === '' || $this->value === null)){
                 $this->errors[] = 'Le champs <b>'.$this->label.'</b> est obligatoire.';
             }            
             return $this;

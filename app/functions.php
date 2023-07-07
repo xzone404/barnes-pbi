@@ -46,6 +46,11 @@ if (defined('DB_HOST')) {
   }
 }
 
+session_start();
+authenticate();
+
+parse_request();
+
 // Get label
 
 function __($tid='', $dft='') {
@@ -67,7 +72,44 @@ function v($vid='') {
   return $variables->{$vid} ?? false;
 }
 
-// Get page / view
+// Auth
+function is_authenticated() {
+  return (!empty($_SESSION['auth'] ?? '') && $_SESSION['auth'] == '1');
+}
+
+function authenticate() {
+  if (get_current_uri() == 'logout') logout();
+  else if (!is_authenticated() && !empty($_POST['k'] ?? '') && $_POST['k'] == PASSWORD) {
+    $_SESSION['auth'] = '1';
+    header('Location: /');
+    die();
+  }
+}
+
+function logout() {
+  unset($_SESSION['auth']);
+  header('Location: /');
+  die();
+}
+
+// Get request / page / view
+
+function parse_request() {
+  global $request_uri;
+
+  $uri = $_SERVER['REQUEST_URI'] ?? '';
+  $uri = trim( preg_replace( ['/\?.*$/', '/\\+/'], ['', '/'], $uri ), '/' );
+
+  $nodes = explode('/', $uri);
+  $nodes_cnt = count($nodes);
+  if ($nodes_cnt >= 2 && preg_match('/^[1-9][0-9]*$/', $nodes[$nodes_cnt-1]) && $nodes[$nodes_cnt-2] == 'edit') {
+    define('EDIT_ID', (int) array_pop($nodes));
+    $request_uri = implode('/', $nodes);
+  } else {
+    define('EDIT_ID', 0);
+    $request_uri = $uri;
+  }
+}
 
 function get_pages() {
   return v('pages');
@@ -89,8 +131,16 @@ function get_page_home() {
 }
 
 function get_current_page() {
-  $uri = $_SERVER['REQUEST_URI'] ?? '';
-  $uri = trim( preg_replace( '/\?.*$/', '', $uri ), '/' );
+  if (!is_authenticated()) {
+    
+    $uri = 'login';
+
+  } else {
+
+    global $request_uri;
+    $uri = $request_uri;
+  
+  }
   
   return get_page($uri);
 }

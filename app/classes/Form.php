@@ -18,16 +18,47 @@ class Form {
   public function get_nonce() { return $this->_nonce; }
 
   private function SUBMIT_VALUES() {
-    return $this->_method == 'post' ? $_POST : ($method == 'get' ? $_GET : $_REQUEST);
+    global $_SQLDATA;
+    
+    $values = [];
+
+    foreach($this->_method as $method) {
+      $values = array_merge(
+        $values,
+        $method == 'sqldata' ?
+          ($_SQLDATA ?? []) :
+            ($method == 'post' ?
+              ($_POST ?? []) :
+                ($method == 'get' ?
+                  ($_GET ?? []) :
+                    ($_REQUEST ?? [])
+                )
+            )
+      );
+    }
+    
+    return $values;
   }
 
 
-  public function __construct($name, $fields=[], $method=''){
+  public function __construct($name, $fields=[], $method='', $data=[]){
 
     $this->_name = $name;
-    $this->_method = strtolower($method);
-    if (!in_array($this->_method, ['post', 'get'])) $this->_method = 'both';
+
+    $this->_method = is_string($method) ? [$method] : $method;
+    foreach ($this->_method as $k => $m) {
+      $m = strtolower($m);
+      $this->_method[$k] = (!in_array($m, ['post', 'get', 'sqldata'])) ? 'both' : $m;
+    }
+    array_unique($this->_method);
+
     $this->fields = $fields;
+
+    if (!empty($data)) {
+      foreach ($this->fields as $field) :
+        $field->value = $data[$field->name] ?? '';
+      endforeach;
+    }
     
     $this->_init();
 
@@ -123,10 +154,10 @@ class Form {
       return;
     endif;
 
-    if (!$this->get_field_value('human')) :
+    /*if (!$this->get_field_value('human')) :
       $this->_errors[] = 'Vous devez accepter les <b>conditions de conservation et d\'utilisation de mes données personnelles</b>.';
       return;
-    endif;
+    endif;*/
     
     // Only check required first
     $validator = new Validation();
@@ -174,57 +205,60 @@ class Form {
   }
 
   public function save_data() {
-    // Define DB file
-    $filepath = PATH_PRIVATE . 'stockage/' . DBFile;
-    $uploadpath = PATH_PRIVATE . 'uploads/';
-    $_create = !is_file($filepath);
+    global $DBConn;
 
-    // Create db connection
-    $db = new SQLite3($filepath, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, DBKey);
-    $db->busyTimeout = 60;
+    if ($this->get_field_value('id') > 0 && !empty($_POST['delete'] ?? '')) {
 
-    // Init DB file
-    if ($_create) :
-      $db->exec('CREATE TABLE users (' .
-        'pk_item INTEGER PRIMARY KEY AUTOINCREMENT, recipient TEXT, owner_status TEXT, ' .
-        'birth_gender TEXT, birth_name TEXT, birth_firstname TEXT, birth_firstname_others TEXT, birth_date TEXT, birth_cp TEXT, birth_city TEXT, birth_country TEXT, ' .
-        'contact_name TEXT, contact_firstname TEXT, contact_address TEXT, contact_address2 TEXT, contact_cp TEXT, contact_city TEXT, contact_country TEXT, contact_email TEXT, contact_phone TEXT, ' .
-        'curr_name TEXT, curr_address TEXT, curr_address2 TEXT, curr_cp TEXT, curr_city TEXT, curr_country TEXT, curr_email TEXT, curr_phone TEXT, ' .
-        //'curr_gender TEXT, curr_name TEXT, curr_firstname TEXT, curr_firstname_others TEXT, curr_address TEXT, curr_address2 TEXT, curr_cp TEXT, curr_city TEXT, curr_country TEXT, curr_email TEXT, curr_phone TEXT, ' .
-        'attachment_file_1 TEXT, attachment_file_2 TEXT, attachment_file_3 TEXT, ' .
-        'death_cp TEXT, death_city TEXT, death_country TEXT, death_date TEXT, death_num TEXT, ' .
-        'other_names TEXT, other_firtnames TEXT, other_cities TEXT, other_jobs TEXT, moreinfos TEXT, excid TEXT' .
-      ')');
-    endif;
+      $q = 'DELETE FROM [' . $this->get_name() . '] WHERE id = :id ;';
+      $s = $DBConn->prepare($q);
+      $s->execute(['id' => $this->get_field_value('id')]);
 
-    $query_insert = 'INSERT INTO users ';
-    $query_insert_fields = [];
-    $query_insert_values = [];
-    foreach ($this->fields as $field) :
-      if ($field->name == 'human') continue;
-      $query_insert_fields[] = $field->name;
-      $esc_val = $db->escapeString($field->to_string());
+    } elseif ($this->get_field_value('id') > 0) {
 
-      // Specific for files
-      if ($field->get_type() == 'file') {
-        $esc_val = '';
-
-        if (isset($_FILES[$field->name]) && $_FILES[$field->name]['size'] > 0) {
-          $ext = strtolower(pathinfo($_FILES[$field->name]['name'], PATHINFO_EXTENSION)); // Get original ext
-          while(empty($esc_val) || is_file($uploadpath . $esc_val . '.' . $ext)) $esc_val = (new Nonce())->createNonce('file-'.$field->name); // Find a unique name
-          $esc_val .= '.' . $ext;
-          move_uploaded_file($_FILES[$field->name]['tmp_name'], $uploadpath . $esc_val); // Move /rename file to Uploads
-        }
+      $q = 'UPDATE [' . $this->get_name() . '] SET {FIELDS} WHERE id = :id ;';
+      $qf = []; $qfv = [];
+      foreach ($this->fields as $field){
+        if ($field->name != 'id') $qf[] = ' [' . $field->name . '] = :' . $field->name;
+        $qfv[$field->name] = $field->to_string();
       }
+      $q = str_replace('{FIELDS}', implode(',', $qf), $q);
 
-      $query_insert_values[] = $esc_val;
-    endforeach;
-    $query_insert .= '('.implode(', ', $query_insert_fields).')';
-    $query_insert .= 'VALUES (\''.implode('\', \'', $query_insert_values).'\')';
-    
-    $db->exec($query_insert);
+      $s = $DBConn->prepare($q);
+      $s->execute($qfv);
 
-    $db->close();
+    } else {
+      
+      $new_id = -1;
+      $r = $DBConn->query('SELECT MAX([id]) as max_id FROM [' . $this->get_name() . '];');
+      if ($r) {
+        foreach ($r as $row) {  
+          $new_id = (int) $row['max_id'];
+          break;
+        }
+      } else {
+        $errInfo = $DBConn->errorInfo();
+        print_r( $errInfo );
+      }
+      if ($new_id > 0) $new_id++;
+      else return false;
+
+      $q = 'INSERT INTO [' . $this->get_name() . '] ({FIELDS}) VALUES ({FIELDS_V}) ;';
+      $qf1 = []; $qf2 = []; $qfv = [];
+      foreach ($this->fields as $field){
+        $qf1[] = '[' . $field->name . ']';
+        $qf2[] = ':' . $field->name;
+        $qfv[$field->name] = ($field->name == 'id') ? $new_id : $field->to_string();
+      }
+      $q = str_replace(['{FIELDS}', '{FIELDS_V}'], [implode(',', $qf1),implode(',', $qf2)], $q);
+
+      $s = $DBConn->prepare($q);
+      try {
+        $s->execute($qfv);
+      } catch(Exception $e) {
+        var_dump($e);
+        var_dump($s->errorInfo());
+      }
+    }
 
   }
 

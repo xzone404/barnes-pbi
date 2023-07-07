@@ -2,8 +2,12 @@
 
 if (!defined('ENV')) die();
 
-view('parts.header');
+// get data before echo => keep headers not sent
+$__h = view('parts.header', null, true);
 
-view('pages.' . get_current_view());
+$__p = view('pages.' . get_current_view(), null, true);
 
-view('parts.footer');
+$__f = view('parts.footer', null, true);
+
+// Output
+echo $__h . "\n" . $__p . "\n" . $__f;

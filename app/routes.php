@@ -10,6 +10,19 @@ return (object) [
     ],
 
     (object) [
+      'uri' => 'login',
+      'view' => 'login',
+      'menu_label' => __('Log in'),
+      'layout' => 'login',
+    ],
+    (object) [
+      'uri' => 'logout',
+      'view' => 'login',
+      'menu_label' => __('Log in'),
+      'layout' => 'login',
+    ],
+
+    (object) [
       'uri' => 'bu',
       'view' => '404',
       'menu_label' => __('My BUs'),
@@ -18,7 +31,7 @@ return (object) [
     (object) [
       'uri' => 'bu/edit',
       'view' => 'bu.edit',
-      'menu_label' => __('Add or edit a BU'),
+      'menu_label' => __('Add a BU'),
       'menu_icon' => 'fas fa-warehouse',
     ],
     (object) [
@@ -37,7 +50,7 @@ return (object) [
     (object) [
       'uri' => 'cluster/edit',
       'view' => 'cluster.edit',
-      'menu_label' => __('Add or edit a cluster'),
+      'menu_label' => __('Add a cluster'),
       'menu_icon' => 'fas fa-home',
     ],
     (object) [
@@ -56,7 +69,7 @@ return (object) [
     (object) [
       'uri' => 'collaborator/edit',
       'view' => 'collaborator.edit',
-      'menu_label' => __('Add or edit a collaborator'),
+      'menu_label' => __('Add a collaborator'),
       'menu_icon' => 'fas fa-user',
     ],
     (object) [
@@ -64,6 +77,63 @@ return (object) [
       'view' => 'collaborator.list',
       'menu_label' => __('List all collaborators'),
       'menu_icon' => 'fas fa-user',
+    ],
+
+    (object) [
+      'uri' => 'collaborator_bu',
+      'view' => '404',
+      'menu_label' => __('Rel BUs / Collaborators'),
+      'menu_icon' => 'fas fa-address-book',
+    ],
+    (object) [
+      'uri' => 'collaborator_bu/edit',
+      'view' => 'collaborator_bu.edit',
+      'menu_label' => __('Add a relationship'),
+      'menu_icon' => 'fas fa-address-book',
+    ],
+    (object) [
+      'uri' => 'collaborator_bu/list',
+      'view' => 'collaborator_bu.list',
+      'menu_label' => __('List all relations'),
+      'menu_icon' => 'fas fa-address-book',
+    ],
+
+    (object) [
+      'uri' => 'collaborator_cluster',
+      'view' => '404',
+      'menu_label' => __('Rel Clusters / Collaborators'),
+      'menu_icon' => 'fas fa-address-book',
+    ],
+    (object) [
+      'uri' => 'collaborator_cluster/edit',
+      'view' => 'collaborator_cluster.edit',
+      'menu_label' => __('Add a relationship'),
+      'menu_icon' => 'fas fa-address-book',
+    ],
+    (object) [
+      'uri' => 'collaborator_cluster/list',
+      'view' => 'collaborator_cluster.list',
+      'menu_label' => __('List all relations'),
+      'menu_icon' => 'fas fa-address-book',
+    ],
+
+    (object) [
+      'uri' => 'cluster_bu',
+      'view' => '404',
+      'menu_label' => __('Rel Clusters / BUs'),
+      'menu_icon' => 'fas fa-address-book',
+    ],
+    (object) [
+      'uri' => 'cluster_bu/edit',
+      'view' => 'cluster_bu.edit',
+      'menu_label' => __('Add a relationship'),
+      'menu_icon' => 'fas fa-address-book',
+    ],
+    (object) [
+      'uri' => 'cluster_bu/list',
+      'view' => 'cluster_bu.list',
+      'menu_label' => __('List all relations'),
+      'menu_icon' => 'fas fa-address-book',
     ],
 
     (object) [
@@ -113,6 +183,45 @@ return (object) [
         ],
         (object)[
           "menu_item" => 'collaborator/list',
+          "menu_children" => [],
+        ],
+      ],
+    ],
+    (object)[
+      "menu_item" => 'collaborator_bu',
+      "menu_children" => [
+        (object)[
+          "menu_item" => 'collaborator_bu/edit',
+          "menu_children" => [],
+        ],
+        (object)[
+          "menu_item" => 'collaborator_bu/list',
+          "menu_children" => [],
+        ],
+      ],
+    ],
+    (object)[
+      "menu_item" => 'collaborator_cluster',
+      "menu_children" => [
+        (object)[
+          "menu_item" => 'collaborator_cluster/edit',
+          "menu_children" => [],
+        ],
+        (object)[
+          "menu_item" => 'collaborator_cluster/list',
+          "menu_children" => [],
+        ],
+      ],
+    ],
+    (object)[
+      "menu_item" => 'cluster_bu',
+      "menu_children" => [
+        (object)[
+          "menu_item" => 'cluster_bu/edit',
+          "menu_children" => [],
+        ],
+        (object)[
+          "menu_item" => 'cluster_bu/list',
           "menu_children" => [],
         ],
       ],

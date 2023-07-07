@@ -4,65 +4,28 @@ if (!defined('ENV')) die();
 
 require_once(PATH_CLASSES . 'Form.php');
 
-$contact_required = ($_POST['recipient'] ?? '') == 'helper';
+global $DBConn;
+$_sqldata = [];
+if (EDIT_ID > 0) {
+	$s = $DBConn->prepare('SELECT * FROM my_bu WHERE id = :id ;');
+	$s->execute(['id' => EDIT_ID]);
+	$r = $s->fetchAll();
+	if ($r) {
+		foreach ($r as $row) {
+			$_sqldata = $row;
+			break;
+		}
+	}
+}
 
-$form_method = 'POST';
-$form_register = new Form('register', [
-	new Field('human', 'bool', 'Accepter les conditions de conservation et d\'utilisation de mes données personnelles', true),
+$form_register = new Form('my_bu', [
+	new Field('id', 'int', '#ID', true),
 
-	new Field('recipient', 'text', 'Titulaire du contrat', true),
-	new Field('owner_status', 'text', 'Statut du titulaire', false),
-	
-	//new Field('contact_gender', 'text', 'Civilité de naissance', $contact_required),
-	new Field('contact_name', 'name', 'Nom de naissance', $contact_required),
-	new Field('contact_firstname', 'name', 'Prénom de naissance', $contact_required),
-	new Field('contact_email', 'email', 'E-mail actuel', $contact_required),
-	new Field('contact_phone', 'tel', 'Téléphone actuel', false),
-	new Field('contact_address', 'text', 'Adresse actuelle', $contact_required),
-	new Field('contact_address2', 'text', 'Complément d\'adresse', false),
-	new Field('contact_cp', 'int', 'Code postal de naissance', $contact_required),
-	new Field('contact_city', 'name', 'Commune de naissance', $contact_required),
-	new Field('contact_country', 'name', 'Pays de naissance', $contact_required),
-	
-	new Field('birth_gender', 'text', 'Civilité de naissance', true),
-	new Field('birth_name', 'name', 'Nom de naissance', true),
-	new Field('birth_firstname', 'name', 'Prénom de naissance', true),
-	new Field('birth_firstname_others', 'name', 'Autres prénoms de naissance', false),
-	new Field('birth_date', 'date_ymd', 'Date de naissance', true),
-	new Field('birth_cp', 'int', 'Code postal de naissance', true),
-	new Field('birth_city', 'name', 'Commune de naissance', true),
-	new Field('birth_country', 'name', 'Pays de naissance', true),
-
-//	new Field('curr_gender', 'text', 'Civilité d\'usage', false),
-	new Field('curr_name', 'name', 'Nom d\'usage', false),
-//	new Field('curr_firstname', 'name', 'Prénom d\'usage', false),
-//	new Field('curr_firstname_others', 'name', 'Autres prénoms d\'usage', false),
-	new Field('curr_address', 'text', 'Adresse actuelle', !$contact_required),
-	new Field('curr_address2', 'text', 'Complément d\'adresse', false),
-	new Field('curr_cp', 'int', 'Code postal actuel', !$contact_required),
-	new Field('curr_city', 'name', 'Commune actuelle', !$contact_required),
-	new Field('curr_country', 'name', 'Pays actuel', !$contact_required),
-	new Field('curr_email', 'email', 'E-mail actuel', !$contact_required),
-	new Field('curr_phone', 'tel', 'Téléphone actuel', false),
-
-	new Field('death_cp', 'int', 'Code postal de décès', false),
-	new Field('death_city', 'name', 'Commune de décès', false),
-	new Field('death_country', 'name', 'Pays de décès', false),
-	new Field('death_date', 'date_ymd', 'Date de décès', false),
-	new Field('death_num', 'text', 'Numéro d\'acte de décès', false),
-
-	new Field('attachment_file_1', 'file', 'Pièce d\'identité ou acte', false, ['MAX_SIZE'=>5*1024*1024, 'VALID_EXT'=>'.png, .jpg, .jpeg, .pdf']),
-	new Field('attachment_file_2', 'file', 'Pièce d\'identité ou acte', false, ['MAX_SIZE'=>5*1024*1024, 'VALID_EXT'=>'.png, .jpg, .jpeg, .pdf']),
-	new Field('attachment_file_3', 'file', 'Pièce d\'identité ou acte', false, ['MAX_SIZE'=>5*1024*1024, 'VALID_EXT'=>'.png, .jpg, .jpeg, .pdf']),
-
-	new Field('other_names', 'name', 'Autres noms connus', false),
-	new Field('other_firtnames', 'name', 'Autres prénoms connus', false),
-	new Field('other_cities', 'text', 'Autres communes connues', false),
-	new Field('other_jobs', 'text', 'Employeurs connus', false),
-
-	new Field('moreinfos', 'text', 'Informations complémentaires', false),
-	new Field('excid', 'text', 'Identifiant Excellcium', false),
-], $form_method);
+	new Field('name', 'name', 'BU\'s name', true),
+	new Field('source', 'int', 'Source', true),
+	new Field('id_source', 'int', 'ID Source', true),
+	new Field('active', 'bool', 'Active', true),
+], ['SQLDATA', 'POST'], $_sqldata);
 
 $errors = $form_register->has_errors() ? $form_register->get_errors() : [];
 ?>
@@ -73,16 +36,113 @@ $errors = $form_register->has_errors() ? $form_register->get_errors() : [];
 <?php view('parts.page_banner'); ?>
 
 		<!-- Form -->
-		<a id="edit_form" name="edit_form"></a>
-		<section id="editor" class="container">
+		<section id="page-update" class="container">
 
 			<div class="row">
+
+<?php
+if ($form_register->is_valid()) :
+?>
+			</div>
+			<div class="row">
 				<div class="col-12">
-
-					[FORM]
-
+					<p class="success text-center">
+						<?php __e('This object has been saved successfully in the datable.'); ?><br/>
+						<a href="<?php echo get_site_link(preg_replace('/edit.*$/', 'list', get_current_uri())); ?>" class="btn btn-primary mt-3">
+							<span class="fa fa-arrow-left"></span> <?php __e('Back to list'); ?>
+						</a>
+					</p>
 				</div>
 			</div>
+<?php
+else :
+?>
+
+				<div class="col-12">
+					<p class="text-center">
+						<span class="fas fa-triangle-exclamation"></span>
+						<?php __e('All fields are required'); ?>
+						<span class="fas fa-triangle-exclamation"></span>
+					</p>
+				</div>
+			</div>
+
+			<?php if(!empty($errors)): ?>
+			<div class="row">
+				<div class="col-12">
+					<section class="box">
+						<ul class="errors">
+							<?php foreach ($errors as $error) : ?>
+							<li class="error"><?php echo $error; ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</section>
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<form method="POST" action="<?php echo esc_attr(get_page_link(get_current_uri())); ?>" enctype="multipart/form-data">
+				<div class="row">
+					<input type="hidden" name="_formid_" value="<?php echo $form_register->get_name(); ?>" />
+					<input type="hidden" name="_frmctrl_" value="<?php echo $form_register->get_nonce(); ?>" />
+
+					<input type="hidden" name="id" id="id" value="<?php echo EDIT_ID; ?>">
+					<input type="hidden" name="source" id="source" value="1">
+
+
+					<div class="col-12">
+
+						<section class="card card-primary shadow-none">
+							<div class="card-header">
+								<h3><?php if ($form_register->get_field_value('id') != '') { ?>Edit BU<?php } else { ?>New BU<?php } ?></h3>
+							</div>
+							<div class="card-body container">
+								<div class="row">
+									<div class="col-12">
+										<div class="mb-3">
+											<label for="name" class="form-label">BU's name :</label>
+											<input type="text" class="form-control" name="name" id="name" placeholder="..."
+												value="<?php echo $form_register->get_field_value_esc('name'); ?>">
+										</div>
+									</div>
+									<div class="col-8 col-md-4">
+										<div class="mb-3">
+											<label for="name" class="form-label">#ID Source :</label>
+											<input type="int" class="form-control" name="id_source" id="id_source" placeholder="..."
+												value="<?php echo $form_register->get_field_value_esc('id_source'); ?>">
+										</div>
+									</div>
+									<div class="col-12">
+										<div class="form-check">
+											<input type="checkbox" id="active" name="active" value="1" class="form-check-input"
+												<?php if (in_array($form_register->get_field_value_esc('active'), ['1'])) echo 'checked'; ?>>
+											<label for="active">Active</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+					</div>
+
+				</div>
+				<div class="row">
+
+					<div class="col-6 text-left">
+						<a href="<?php echo get_site_link(preg_replace('/edit.*$/', 'list', get_current_uri())); ?>" class="d-none d-md-inline-block btn btn-outline-secondary">
+							<span class="fa fa-arrow-left"></span> <?php __e('Back to list'); ?>
+						</a>
+						<input type="submit" class="btn btn-outline-primary" name="delete" id="delete" value="Delete" onclick="if (!confirm('Are you sure you want to delete this element ?')) return false;" />
+					</div>
+					<div class="col-6 text-right">
+						<input type="submit" class="btn btn-primary" name="send" id="send" value="Submit" />
+					</div>
+
+				</div>
+			</form>
+<?php
+endif;
+?>
 
 		</section>
 

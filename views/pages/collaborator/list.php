@@ -44,12 +44,12 @@ if ($DBConn) {
 						<tbody>
 						<?php foreach($data as $row) : ?>
 						<tr>
-							<td><?php htmlentities($row['id'] ?? ''); ?></td>
-							<td><?php htmlentities($row['firstname'] ?? ''); ?></td>
-							<td><?php htmlentities($row['lastname'] ?? ''); ?></td>
-							<td><?php htmlentities($row['email'] ?? ''); ?></td>
-							<td><?php htmlentities($row['creation_at'] ?? ''); ?></td>
-							<td><?php htmlentities($row['modified_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['id'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['firstname'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['lastname'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['email'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['creation_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['modified_at'] ?? ''); ?></td>
 						</tr>
 						<?php endforeach; ?>
 						</tbody>

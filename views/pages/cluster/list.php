@@ -34,9 +34,7 @@ if ($DBConn) {
 						<thead>
 						<tr>
 							<th>#ID</th>
-							<th>BU Name</th>
-							<th>Source</th>
-							<th>ID source</th>
+							<th>Cluster Name</th>
 							<th>Active</th>
 							<th>Created</th>
 							<th>Modified</th>
@@ -45,66 +43,18 @@ if ($DBConn) {
 						<tbody>
 						<?php foreach($data as $row) : ?>
 						<tr>
-							<td><?php htmlentities($row['id'] ?? ''); ?></td>
-							<td><?php htmlentities($row['name'] ?? ''); ?></td>
-							<td><?php htmlentities($row['source'] ?? ''); ?></td>
-							<td><?php htmlentities($row['id_source'] ?? ''); ?></td>
-							<td><?php htmlentities($row['active'] ?? ''); ?></td>
-							<td><?php htmlentities($row['creation_at'] ?? ''); ?></td>
-							<td><?php htmlentities($row['modified_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['id'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['name'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['active'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['creation_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['modified_at'] ?? ''); ?></td>
 						</tr>
 						<?php endforeach; ?>
-						<?php /*
-						<tr>
-							<td>Trident</td>
-							<td>Internet Explorer 4.0</td>
-							<td>Win 95+</td>
-							<td> 4</td>
-							<td>X</td>
-							<td>X</td>
-							<td>X</td>
-						</tr>
-						<tr>
-							<td>Trident</td>
-							<td>Internet
-								Explorer 5.0
-							</td>
-							<td>Win 95+</td>
-							<td>5</td>
-							<td>C</td>
-							<td>C</td>
-							<td>C</td>
-						</tr>
-						<tr>
-							<td>Trident</td>
-							<td>Internet
-								Explorer 5.5
-							</td>
-							<td>Win 95+</td>
-							<td>5.5</td>
-							<td>A</td>
-							<td>A</td>
-							<td>A</td>
-						</tr>
-						<tr>
-							<td>Trident</td>
-							<td>Internet
-								Explorer 6
-							</td>
-							<td>Win 98+</td>
-							<td>6</td>
-							<td>A</td>
-							<td>A</td>
-							<td>A</td>
-						</tr>
-						*/ ?>
 						</tbody>
 						<tfoot>
 						<tr>
-						<th>#ID</th>
-							<th>BU Name</th>
-							<th>Source</th>
-							<th>ID source</th>
+							<th>#ID</th>
+							<th>Cluster Name</th>
 							<th>Active</th>
 							<th>Created</th>
 							<th>Modified</th>

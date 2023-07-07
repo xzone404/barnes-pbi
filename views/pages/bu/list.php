@@ -7,7 +7,7 @@ $data = [];
 
 global $DBConn;
 if ($DBConn) {
-	$r = $DBConn->query("SELECT * FROM my_bu;");
+	$r = $DBConn->query('SELECT * FROM my_bu;');
 	if ($r) {
 		foreach ($r as $row) {
 			$data[] = $row;
@@ -15,30 +15,8 @@ if ($DBConn) {
 	}
 }
 
-/*
-require_once(PATH_CLASSES . 'Form.php');
+$uri_edit = get_site_link(preg_replace('/list$/', 'edit', get_current_uri()));
 
-$fields = [
-	new Field('human', 'bool', 'Accepter les conditions de conservation et d\'utilisation de mes données personnelles', false),
-
-	new Field('recipient', 'text', 'Titulaire du contrat', false),
-	new Field('owner_status', 'text', 'Statut du titulaire', false),
-	
-	//new Field('contact_gender', 'text', 'Civilité de naissance', $contact_required),
-	new Field('contact_name', 'name', 'Nom de naissance', false),
-	new Field('contact_firstname', 'name', 'Prénom de naissance', false),
-	new Field('contact_email', 'email', 'E-mail actuel', false),
-	new Field('contact_phone', 'tel', 'Téléphone actuel', false),
-	new Field('contact_address', 'text', 'Adresse actuelle', false),
-	new Field('contact_address2', 'text', 'Complément d\'adresse', false),
-	new Field('contact_cp', 'int', 'Code postal de naissance', false),
-	new Field('contact_city', 'name', 'Commune de naissance', false),
-	new Field('contact_country', 'name', 'Pays de naissance', false),
-
-	new Field('moreinfos', 'text', 'Informations complémentaires', false),
-	new Field('excid', 'text', 'Identifiant Excellcium', false),
-];
-*/
 ?>
 	<div id="page-wrapper">
 
@@ -47,8 +25,7 @@ $fields = [
 <?php view('parts.page_banner'); ?>
 
 		<!-- Form -->
-		<a id="inscription" name="inscription"></a>
-		<section id="subscribe" class="container">
+		<section id="list-items" class="container pb-5">
 
 			<div class="row">
 				<div class="col-12">
@@ -69,13 +46,13 @@ $fields = [
 						<tbody>
 						<?php foreach($data as $row) : ?>
 						<tr>
-							<td><?php htmlentities($row['id'] ?? ''); ?></td>
-							<td><?php htmlentities($row['name'] ?? ''); ?></td>
-							<td><?php htmlentities($row['source'] ?? ''); ?></td>
-							<td><?php htmlentities($row['id_source'] ?? ''); ?></td>
-							<td><?php htmlentities($row['active'] ?? ''); ?></td>
-							<td><?php htmlentities($row['creation_at'] ?? ''); ?></td>
-							<td><?php htmlentities($row['modified_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['id'] ?? ''); ?></td>
+							<td><a href="<?php echo $uri_edit.'/'.htmlentities($row['id'] ?? ''); ?>"><?php echo htmlentities($row['name'] ?? ''); ?></a></td>
+							<td><?php echo htmlentities($row['source'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['id_source'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['active'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['creation_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['modified_at'] ?? ''); ?></td>
 						</tr>
 						<?php endforeach; ?>
 						</tbody>

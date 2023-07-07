@@ -7,7 +7,7 @@ $data = [];
 
 global $DBConn;
 if ($DBConn) {
-	$r = $DBConn->query("SELECT c.name as collaborator_name, g.name as cluster_name, s.label as status_name, bc.* FROM my_collaborator c, my_cluster g, my_status s, my_cluster_collaborator bc WHERE bc.collaborator = c.id AND bc.cluster = g.id AND bc.status = s.id;");
+	$r = $DBConn->query("SELECT CONCAT(c.firstname, ' ', c.lastname) as collaborator_name, b.name as bu_name, s.label as status_name, bc.* FROM my_collaborator c, my_bu b, my_status_type s, my_bu_collaborator bc WHERE bc.collaborator = c.id AND bc.bu = b.id AND bc.status = s.id;");
 	if ($r) {
 		foreach ($r as $row) {
 			$data[] = $row;
@@ -34,8 +34,8 @@ if ($DBConn) {
 						<thead>
 						<tr>
 							<th>#ID</th>
-							<th>Cluster</th>
-							<th>C.id</th>
+							<th>BU</th>
+							<th>B.id</th>
 							<th>Collaborator</th>
 							<th>C.id</th>
 							<th>Status</th>
@@ -47,23 +47,23 @@ if ($DBConn) {
 						<tbody>
 						<?php foreach($data as $row) : ?>
 						<tr>
-							<td><?php htmlentities($row['id'] ?? ''); ?></td>
-							<td><?php htmlentities($row['cluster_name'] ?? ''); ?></td>
-							<td><?php htmlentities($row['cluster'] ?? ''); ?></td>
-							<td><?php htmlentities($row['collaborator_name'] ?? ''); ?></td>
-							<td><?php htmlentities($row['collaborator'] ?? ''); ?></td>
-							<td><?php htmlentities($row['status_name'] ?? ''); ?></td>
-							<td><?php htmlentities($row['status'] ?? ''); ?></td>
-							<td><?php htmlentities($row['creation_at'] ?? ''); ?></td>
-							<td><?php htmlentities($row['modified_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['id'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['bu_name'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['bu'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['collaborator_name'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['collaborator'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['status_name'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['status'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['creation_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['modified_at'] ?? ''); ?></td>
 						</tr>
 						<?php endforeach; ?>
 						</tbody>
 						<tfoot>
 						<tr>
 							<th>#ID</th>
-							<th>Cluster</th>
-							<th>C.id</th>
+							<th>BU</th>
+							<th>B.id</th>
 							<th>Collaborator</th>
 							<th>C.id</th>
 							<th>Status</th>

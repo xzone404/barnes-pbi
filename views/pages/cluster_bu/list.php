@@ -7,7 +7,7 @@ $data = [];
 
 global $DBConn;
 if ($DBConn) {
-	$r = $DBConn->query("SELECT c.name as cluster_name, b.name as bu_name, s.label as status_name, bc.* FROM my_cluster c, my_bu b, my_status s, my_cluster_bu bc WHERE bc.cluster = c.id AND bc.bu = b.id AND bc.status = s.id;");
+	$r = $DBConn->query("SELECT c.name as cluster_name, b.name as bu_name, bc.* FROM my_cluster c, my_bu b, my_cluster_bu bc WHERE bc.cluster = c.id AND bc.bu = b.id;");
 	if ($r) {
 		foreach ($r as $row) {
 			$data[] = $row;
@@ -38,24 +38,16 @@ if ($DBConn) {
 							<th>C.id</th>
 							<th>BU</th>
 							<th>B.id</th>
-							<th>Status</th>
-							<th>S.id</th>
-							<th>Created</th>
-							<th>Modified</th>
 						</tr>
 						</thead>
 						<tbody>
 						<?php foreach($data as $row) : ?>
 						<tr>
-							<td><?php htmlentities($row['id'] ?? ''); ?></td>
-							<td><?php htmlentities($row['cluster_name'] ?? ''); ?></td>
-							<td><?php htmlentities($row['cluster'] ?? ''); ?></td>
-							<td><?php htmlentities($row['bu_name'] ?? ''); ?></td>
-							<td><?php htmlentities($row['bu'] ?? ''); ?></td>
-							<td><?php htmlentities($row['status_name'] ?? ''); ?></td>
-							<td><?php htmlentities($row['status'] ?? ''); ?></td>
-							<td><?php htmlentities($row['creation_at'] ?? ''); ?></td>
-							<td><?php htmlentities($row['modified_at'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['id'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['cluster_name'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['cluster'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['bu_name'] ?? ''); ?></td>
+							<td><?php echo htmlentities($row['bu'] ?? ''); ?></td>
 						</tr>
 						<?php endforeach; ?>
 						</tbody>
@@ -66,10 +58,6 @@ if ($DBConn) {
 							<th>C.id</th>
 							<th>BU</th>
 							<th>B.id</th>
-							<th>Status</th>
-							<th>S.id</th>
-							<th>Created</th>
-							<th>Modified</th>
 						</tr>
 						</tfoot>
 					</table>
