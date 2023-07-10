@@ -132,7 +132,9 @@ else :
 						<a href="<?php echo get_site_link(preg_replace('/edit.*$/', 'list', get_current_uri())); ?>" class="d-none d-md-inline-block btn btn-outline-secondary">
 							<span class="fa fa-arrow-left"></span> <?php __e('Back to list'); ?>
 						</a>
+						<?php if (EDIT_ID > 0) { ?>
 						<input type="submit" class="btn btn-outline-primary" name="delete" id="delete" value="Delete" onclick="if (!confirm('Are you sure you want to delete this element ?')) return false;" />
+						<?php } ?>
 					</div>
 					<div class="col-6 text-right">
 						<input type="submit" class="btn btn-primary" name="send" id="send" value="Submit" />

@@ -15,6 +15,8 @@ if ($DBConn) {
 	}
 }
 
+$uri_edit = get_site_link(preg_replace('/list$/', 'edit', get_current_uri()));
+
 ?>
 	<div id="page-wrapper">
 
@@ -47,7 +49,7 @@ if ($DBConn) {
 						<tbody>
 						<?php foreach($data as $row) : ?>
 						<tr>
-							<td><?php echo htmlentities($row['id'] ?? ''); ?></td>
+							<td><a href="<?php echo $uri_edit.'/'.htmlentities($row['id'] ?? ''); ?>"><?php echo htmlentities($row['id'] ?? ''); ?></a></td>
 							<td><?php echo htmlentities($row['bu_name'] ?? ''); ?></td>
 							<td><?php echo htmlentities($row['bu'] ?? ''); ?></td>
 							<td><?php echo htmlentities($row['collaborator_name'] ?? ''); ?></td>
