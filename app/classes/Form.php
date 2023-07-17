@@ -245,6 +245,7 @@ class Form {
       $q = 'INSERT INTO [' . $this->get_name() . '] ({FIELDS}) VALUES ({FIELDS_V}) ;';
       $qf1 = []; $qf2 = []; $qfv = [];
       foreach ($this->fields as $field){
+        if (get_current_uri() == 'cluster_bu/edit' && $field->name == 'id') continue;
         $qf1[] = '[' . $field->name . ']';
         $qf2[] = ':' . $field->name;
         $qfv[$field->name] = ($field->name == 'id') ? $new_id : $field->to_string();
