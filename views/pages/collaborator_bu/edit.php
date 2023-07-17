@@ -128,7 +128,7 @@ else :
 											<select class="form-control" name="status" id="status" required>
 												<option value="">-</value>
 											<?php foreach ($status as $s) : ?>
-												<option value="<?php echo htmlentities($s['id']); ?>"<?php if ($form_register->get_field_value_esc('status') == $s['id']) echo ' selected'; ?>><?php echo htmlentities($b['name']); ?></option>
+												<option value="<?php echo htmlentities($s['id']); ?>"<?php if ($form_register->get_field_value_esc('status') == $s['id']) echo ' selected'; ?>><?php echo htmlentities($s['name']); ?></option>
 											<?php endforeach; ?>
 											</select>
 										</div>
