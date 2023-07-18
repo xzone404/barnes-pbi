@@ -35,3 +35,13 @@
     padding: 1rem;
   }
 }
+
+.nav-sidebar {
+  .menu-open > .nav-link,
+  .menu-is-opening > .nav-link {
+    svg.right,
+    i.right {
+      transform: rotate(-180deg);
+    }
+  }
+}

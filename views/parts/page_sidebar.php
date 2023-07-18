@@ -44,7 +44,27 @@ $menu = v('menu');
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+          
           <?php
+            // Version without submenus
+            foreach ($menu as $m_item) :
+              $menu_item = get_page($m_item->menu_item);
+              $menu_item_on = ($menu_item->uri == preg_replace('%^([^\/]+)\/.*$%', '$1', get_current_uri()));
+          ?>
+          <li class="nav-item<?php if ($menu_item_on) echo ' menu-open'; ?>">
+            <a href="<?php echo get_page_link($menu_item->uri); ?>/list" class="nav-link<?php if ($menu_item_on) echo ' active'; ?>">
+              <i class="nav-icon <?php echo $menu_item->menu_icon ?? 'fas fa-tachometer-alt'; ?>"></i>
+              <p>
+                <?php echo $menu_item->menu_label; ?>
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
+          <?php
+            endforeach;
+          ?>
+          <?php /*
+            // Version with submenus
             foreach ($menu as $m_item) :
               $menu_item = get_page($m_item->menu_item);
               $menu_item_on = ($menu_item->uri == preg_replace('%^([^\/]+)\/.*$%', '$1', get_current_uri()));
@@ -73,7 +93,8 @@ $menu = v('menu');
             </ul>
             <?php endif; ?>
           </li>
-          <?php endforeach; ?>
+          <?php endforeach; */ ?>
+
           <?php /*
           <li class="nav-item">
             <a href="mentions" class="nav-link">
