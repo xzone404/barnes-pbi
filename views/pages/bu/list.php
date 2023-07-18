@@ -22,8 +22,6 @@ $uri_edit = get_site_link(preg_replace('/list$/', 'edit', get_current_uri()));
 
 <?php view('parts.page_header'); ?>
 
-<?php view('parts.page_banner'); ?>
-
 		<!-- Form -->
 		<section id="list-items" class="container pb-5">
 
@@ -107,6 +105,7 @@ $inline_scripts .= <<<END
 			"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 		}
 	}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+	$("#example1_filter").append($('<a href="{$uri_edit}" class="btn btn-primary ml-3" title="New"><span class="fa fa-plus"></span></a>'));
 </script>
 END;
 ?>

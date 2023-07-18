@@ -33,8 +33,6 @@ $errors = $form_register->has_errors() ? $form_register->get_errors() : [];
 
 <?php view('parts.page_header'); ?>
 
-<?php view('parts.page_banner'); ?>
-
 		<!-- Form -->
 		<section id="page-update" class="container">
 
