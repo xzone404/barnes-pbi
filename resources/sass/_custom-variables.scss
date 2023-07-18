@@ -1,3 +1,7 @@
+/***
+ * Bootstrap Variables
+ ***/
+
 $primary: #cc0000 !default;
 $secondary: #6c757d !default; // = $gray-600
 
@@ -8,3 +12,9 @@ $theme-colors: map-merge((
   "custom-color":    $custom-color,
 ), $theme-colors);
 */
+
+/***
+ *AdminLTE Variables
+ ***/
+
+$sidebar-width: 300px !default;
